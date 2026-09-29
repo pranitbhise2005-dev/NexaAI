@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Chat History - NexaAI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body class="history-body">
+
+
+    <!-- Navbar -->
+
+    <nav class="main-navbar">
+
+        <div class="navbar-brand">
+
+            <span class="brand-icon">🤖</span>
+
+            <span>NexaAI</span>
+
+        </div>
+
+
+        <div class="navbar-links">
+
+            <a href="/dashboard">
+                Dashboard
+            </a>
+
+            <a href="/chat">
+                AI Chat
+            </a>
+
+            <a href="/pdf">
+                PDF Assistant
+            </a>
+
+            <a href="/history"
+               class="active">
+                History
+            </a>
+
+            <a href="/logout"
+               class="logout-link">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- Main -->
+
+    <main class="history-container">
+
+
+        <section class="history-header">
+
+            <div>
+
+                <p class="history-label">
+                    NEXA AI
+                </p>
+
+                <h1>
+                    Chat History
+                </h1>
+
+                <p>
+                    Review your previous conversations
+                    with NexaAI.
+                </p>
+
+            </div>
+
+
+            <a href="/chat"
+               class="new-chat-button">
+
+                + New Chat
+
+            </a>
+
+        </section>
+
+
+        {% if history %}
+
+        <section class="history-list">
+
+            {% for chat in history %}
+
+            <div class="history-card">
+
+                <div class="history-icon">
+                    💬
+                </div>
+
+                <div class="history-content">
+
+                    <h3>
+                        {{ chat.question }}
+                    </h3>
+
+                    <p>
+                        {{ chat.answer }}
+                    </p>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </section>
+
+        {% else %}
+
+        <section class="empty-history">
+
+            <div class="empty-history-icon">
+                💬
+            </div>
+
+            <h2>
+                No conversations yet
+            </h2>
+
+            <p>
+                Start chatting with NexaAI and your
+                conversations will appear here.
+            </p>
+
+            <a href="/chat"
+               class="new-chat-button">
+
+                Start Chat
+
+            </a>
+
+        </section>
+
+        {% endif %}
+
+
+    </main>
+
+
+    <footer class="dashboard-footer">
+
+        <p>
+            © 2026 NexaAI. Your Intelligent Personal Assistant.
+        </p>
+
+    </footer>
+
+
+</body>
+
+</html>

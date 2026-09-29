@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {{ document.filename }} - NexaAI
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+
+<body class="document-page">
+
+
+    <!-- =====================================
+         NAVBAR
+    ====================================== -->
+
+    <nav class="navbar">
+
+        <div class="nav-container">
+
+
+            <!-- Brand -->
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="nav-brand"
+            >
+
+                <span class="brand-icon">
+                    🤖
+                </span>
+
+                <span class="brand-name">
+                    NexaAI
+                </span>
+
+            </a>
+
+
+            <!-- Navigation -->
+
+            <div class="nav-links">
+
+                <a
+                    href="{{ url_for('dashboard') }}"
+                >
+                    Dashboard
+                </a>
+
+                <a
+                    href="{{ url_for('chat') }}"
+                >
+                    AI Chat
+                </a>
+
+                <a
+                    href="{{ url_for('pdf_assistant') }}"
+                    class="active"
+                >
+                    PDF Assistant
+                </a>
+
+                <a
+                    href="{{ url_for('history') }}"
+                >
+                    History
+                </a>
+
+                <a
+                    href="{{ url_for('logout') }}"
+                    class="logout-link"
+                >
+                    Logout
+                </a>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- =====================================
+         MAIN
+    ====================================== -->
+
+    <main class="document-container">
+
+
+        <!-- =================================
+             BACK BUTTON
+        ================================== -->
+
+        <a
+            href="{{ url_for('pdf_assistant') }}"
+            class="back-button"
+        >
+
+            ← Back to PDF Assistant
+
+        </a>
+
+
+
+        <!-- =================================
+             DOCUMENT HEADER
+        ================================== -->
+
+        <section class="document-header">
+
+            <div class="document-header-left">
+
+                <div class="document-large-icon">
+                    📄
+                </div>
+
+
+                <div>
+
+                    <span class="document-label">
+                        PDF DOCUMENT
+                    </span>
+
+                    <h1>
+                        {{ document.filename }}
+                    </h1>
+
+                    {% if document.uploaded_at %}
+
+                        <p>
+                            Uploaded:
+                            {{ document.uploaded_at }}
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Header Actions -->
+
+            <div class="document-header-actions">
+
+                <a
+                    href="{{ url_for(
+                        'view_pdf',
+                        document_id=document.id
+                    ) }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="open-pdf-button"
+                >
+
+                    👁 Open PDF
+
+                </a>
+
+
+                <form
+                    method="POST"
+                    action="{{ url_for(
+                        'delete_document',
+                        document_id=document.id
+                    ) }}"
+                    onsubmit="return confirmDelete();"
+                >
+
+                    <button
+                        type="submit"
+                        class="delete-pdf-button"
+                    >
+
+                        🗑 Delete
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================
+             ASK NEXAAI
+        ================================== -->
+
+        <section class="document-card">
+
+            <div class="document-card-header">
+
+                <div class="document-card-icon">
+                    🤖
+                </div>
+
+                <div>
+
+                    <h2>
+                        Ask NexaAI
+                    </h2>
+
+                    <p>
+                        Ask questions about the
+                        content of this PDF.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Question Form -->
+
+            <form
+                method="POST"
+                action="{{ url_for(
+                    'ask_pdf',
+                    document_id=document.id
+                ) }}"
+                class="pdf-question-form"
+            >
+
+                <label
+                    for="question"
+                >
+                    Your Question
+                </label>
+
+
+                <textarea
+                    id="question"
+                    name="question"
+                    rows="5"
+                    placeholder="Example: What are the main topics discussed in this document?"
+                    required
+                ></textarea>
+
+
+                <div class="question-footer">
+
+                    <span>
+                        💡 Ask questions based on
+                        the uploaded document.
+                    </span>
+
+                    <button
+                        type="submit"
+                        class="ask-button"
+                        id="askButton"
+                    >
+
+                        🤖 Ask NexaAI
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+
+        <!-- =================================
+             AI ANSWER
+        ================================== -->
+
+        {% if answer %}
+
+        <section class="ai-result answer-result">
+
+            <div class="result-header">
+
+                <div class="result-icon">
+                    🤖
+                </div>
+
+                <div>
+
+                    <span>
+                        NEXAAI RESPONSE
+                    </span>
+
+                    <h2>
+                        Answer
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="result-body">
+
+                {{ answer | replace('\n', '<br>') | safe }}
+
+            </div>
+
+        </section>
+
+        {% endif %}
+
+
+
+        <!-- =================================
+             SUMMARY SECTION
+        ================================== -->
+
+        <section class="document-card">
+
+            <div class="document-card-header">
+
+                <div class="document-card-icon">
+                    📝
+                </div>
+
+                <div>
+
+                    <h2>
+                        AI Summary
+                    </h2>
+
+                    <p>
+                        Generate a concise summary
+                        of this PDF with NexaAI.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form
+                method="POST"
+                action="{{ url_for(
+                    'summarize_pdf',
+                    document_id=document.id
+                ) }}"
+            >
+
+                <button
+                    type="submit"
+                    class="summary-button"
+                    id="summaryButton"
+                >
+
+                    ✨ Generate AI Summary
+
+                </button>
+
+            </form>
+
+        </section>
+
+
+
+        <!-- =================================
+             SUMMARY RESULT
+        ================================== -->
+
+        {% if summary %}
+
+        <section class="ai-result summary-result">
+
+            <div class="result-header">
+
+                <div class="result-icon">
+                    📝
+                </div>
+
+                <div>
+
+                    <span>
+                        NEXAAI DOCUMENT SUMMARY
+                    </span>
+
+                    <h2>
+                        Summary
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="result-body">
+
+                {{ summary | replace('\n', '<br>') | safe }}
+
+            </div>
+
+        </section>
+
+        {% endif %}
+
+
+
+        <!-- =================================
+             DOCUMENT INFORMATION
+        ================================== -->
+
+        <section class="document-card document-information">
+
+            <div class="document-card-header">
+
+                <div class="document-card-icon">
+                    ℹ️
+                </div>
+
+                <div>
+
+                    <h2>
+                        Document Information
+                    </h2>
+
+                    <p>
+                        Information about your uploaded
+                        PDF document.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="document-info-grid">
+
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        File Name
+                    </span>
+
+                    <strong>
+                        {{ document.filename }}
+                    </strong>
+
+                </div>
+
+
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        File Type
+                    </span>
+
+                    <strong>
+                        PDF Document
+                    </strong>
+
+                </div>
+
+
+
+                {% if document.uploaded_at %}
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        Uploaded
+                    </span>
+
+                    <strong>
+                        {{ document.uploaded_at }}
+                    </strong>
+
+                </div>
+
+                {% endif %}
+
+
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        AI Assistant
+                    </span>
+
+                    <strong>
+                        NexaAI
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================
+             QUICK ACTIONS
+        ================================== -->
+
+        <section class="quick-actions">
+
+            <a
+                href="{{ url_for('pdf_assistant') }}"
+                class="quick-action"
+            >
+
+                <span>
+                    📚
+                </span>
+
+                <div>
+
+                    <strong>
+                        All Documents
+                    </strong>
+
+                    <small>
+                        View your PDFs
+                    </small>
+
+                </div>
+
+            </a>
+
+
+            <a
+                href="{{ url_for('chat') }}"
+                class="quick-action"
+            >
+
+                <span>
+                    💬
+                </span>
+
+                <div>
+
+                    <strong>
+                        AI Chat
+                    </strong>
+
+                    <small>
+                        Chat with NexaAI
+                    </small>
+
+                </div>
+
+            </a>
+
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="quick-action"
+            >
+
+                <span>
+                    🏠
+                </span>
+
+                <div>
+
+                    <strong>
+                        Dashboard
+                    </strong>
+
+                    <small>
+                        Return to dashboard
+                    </small>
+
+                </div>
+
+            </a>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =====================================
+         FOOTER
+    ====================================== -->
+
+    <footer class="document-footer">
+
+        <p>
+            © 2026 NexaAI.
+            Your intelligent document assistant.
+        </p>
+
+    </footer>
+
+
+
+    <!-- =====================================
+         JAVASCRIPT
+    ====================================== -->
+
+    <script>
+
+        /*
+         * Delete Confirmation
+         */
+
+        function confirmDelete() {
+
+            return confirm(
+                "Are you sure you want to delete this PDF?\n\n" +
+                "This action cannot be undone."
+            );
+
+        }
+
+
+
+        /*
+         * Ask Button Loading
+         */
+
+        const questionForm =
+            document.querySelector(
+                ".pdf-question-form"
+            );
+
+        const askButton =
+            document.getElementById(
+                "askButton"
+            );
+
+
+        if (questionForm && askButton) {
+
+            questionForm.addEventListener(
+                "submit",
+                function () {
+
+                    askButton.disabled =
+                        true;
+
+                    askButton.innerHTML =
+                        "⏳ NexaAI is thinking...";
+
+                }
+            );
+
+        }
+
+
+
+        /*
+         * Summary Button Loading
+         */
+
+        const summaryButton =
+            document.getElementById(
+                "summaryButton"
+            );
+
+
+        if (summaryButton) {
+
+            summaryButton
+                .closest("form")
+                .addEventListener(
+                    "submit",
+                    function () {
+
+                        summaryButton.disabled =
+                            true;
+
+                        summaryButton.innerHTML =
+                            "⏳ Generating Summary...";
+
+                    }
+                );
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>

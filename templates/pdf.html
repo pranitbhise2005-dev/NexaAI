@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>PDF Assistant - NexaAI</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+
+<body class="pdf-page">
+
+
+    <!-- =====================================
+         NAVBAR
+    ====================================== -->
+
+    <nav class="navbar">
+
+        <div class="nav-container">
+
+            <!-- Logo -->
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="nav-brand"
+            >
+
+                <span class="brand-icon">
+                    🤖
+                </span>
+
+                <span class="brand-name">
+                    NexaAI
+                </span>
+
+            </a>
+
+
+            <!-- Navigation -->
+
+            <div class="nav-links">
+
+                <a
+                    href="{{ url_for('dashboard') }}"
+                >
+                    Dashboard
+                </a>
+
+                <a
+                    href="{{ url_for('chat') }}"
+                >
+                    AI Chat
+                </a>
+
+                <a
+                    href="{{ url_for('pdf_assistant') }}"
+                    class="active"
+                >
+                    PDF Assistant
+                </a>
+
+                <a
+                    href="{{ url_for('history') }}"
+                >
+                    History
+                </a>
+
+                <a
+                    href="{{ url_for('logout') }}"
+                    class="logout-link"
+                >
+                    Logout
+                </a>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- =====================================
+         MAIN CONTENT
+    ====================================== -->
+
+    <main class="pdf-container">
+
+
+        <!-- =================================
+             PAGE HEADER
+        ================================== -->
+
+        <section class="pdf-header">
+
+            <div class="pdf-header-icon">
+                📄
+            </div>
+
+            <div>
+
+                <h1>
+                    NexaAI PDF Assistant
+                </h1>
+
+                <p>
+                    Upload your PDF documents,
+                    ask questions and generate
+                    AI-powered summaries.
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================
+             UPLOAD SECTION
+        ================================== -->
+
+        <section class="pdf-card upload-card">
+
+            <div class="pdf-card-header">
+
+                <div>
+
+                    <h2>
+                        Upload a PDF
+                    </h2>
+
+                    <p>
+                        Select a PDF document from
+                        your computer to analyze it
+                        with NexaAI.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Upload Form -->
+
+            <form
+                method="POST"
+                action="{{ url_for('upload_pdf') }}"
+                enctype="multipart/form-data"
+                id="pdfUploadForm"
+            >
+
+                <div
+                    class="upload-area"
+                    id="uploadArea"
+                >
+
+                    <div class="upload-icon">
+                        📁
+                    </div>
+
+                    <h3>
+                        Choose your PDF
+                    </h3>
+
+                    <p>
+                        Click the button below to
+                        select a PDF file.
+                    </p>
+
+                    <p class="upload-limit">
+                        Maximum file size: 10 MB
+                    </p>
+
+
+                    <!-- File Input -->
+
+                    <input
+                        type="file"
+                        id="pdf"
+                        name="pdf"
+                        accept=".pdf,application/pdf"
+                        hidden
+                        required
+                    >
+
+
+                    <!-- Choose File -->
+
+                    <label
+                        for="pdf"
+                        class="choose-file-button"
+                    >
+                        📂 Choose PDF
+                    </label>
+
+
+                    <!-- Selected File -->
+
+                    <div
+                        id="selectedFile"
+                        class="selected-file"
+                        style="display: none;"
+                    >
+
+                        <span class="selected-file-icon">
+                            📄
+                        </span>
+
+                        <span
+                            id="fileName"
+                            class="selected-file-name"
+                        >
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Upload Button -->
+
+                <button
+                    type="submit"
+                    class="upload-button"
+                    id="uploadButton"
+                    disabled
+                >
+
+                    <span>
+                        ⬆
+                    </span>
+
+                    Upload PDF
+
+                </button>
+
+            </form>
+
+        </section>
+
+
+
+        <!-- =================================
+             YOUR DOCUMENTS
+        ================================== -->
+
+        <section class="pdf-card documents-section">
+
+            <div class="pdf-card-header">
+
+                <div>
+
+                    <h2>
+                        Your Documents
+                    </h2>
+
+                    <p>
+                        Open, analyze or delete
+                        your uploaded PDF documents.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            {% if documents %}
+
+
+                <div class="document-list">
+
+
+                    {% for document in documents %}
+
+
+                        <div class="document-item">
+
+
+                            <!-- Document Information -->
+
+                            <div class="document-left">
+
+                                <div class="document-file-icon">
+                                    📄
+                                </div>
+
+
+                                <div class="document-details">
+
+                                    <h3>
+                                        {{ document.filename }}
+                                    </h3>
+
+                                    <p>
+                                        Uploaded PDF
+                                    </p>
+
+                                    {% if document.uploaded_at %}
+
+                                        <small>
+                                            Uploaded:
+                                            {{ document.uploaded_at }}
+                                        </small>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+
+
+                            <!-- Document Actions -->
+
+                            <div class="document-actions">
+
+
+                                <!-- OPEN PDF -->
+
+                                <a
+                                    href="{{ url_for(
+                                        'view_pdf',
+                                        document_id=document.id
+                                    ) }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="document-open-button"
+                                >
+
+                                    👁
+                                    <span>
+                                        Open
+                                    </span>
+
+                                </a>
+
+
+
+                                <!-- ANALYZE -->
+
+                                <a
+                                    href="{{ url_for(
+                                        'open_document',
+                                        document_id=document.id
+                                    ) }}"
+                                    class="document-analyze-button"
+                                >
+
+                                    🤖
+                                    <span>
+                                        Analyze
+                                    </span>
+
+                                </a>
+
+
+
+                                <!-- DELETE -->
+
+                                <form
+                                    method="POST"
+                                    action="{{ url_for(
+                                        'delete_document',
+                                        document_id=document.id
+                                    ) }}"
+                                    onsubmit="return confirmDelete(
+                                        '{{ document.filename|e }}'
+                                    );"
+                                >
+
+                                    <button
+                                        type="submit"
+                                        class="document-delete-button"
+                                    >
+
+                                        🗑
+                                        <span>
+                                            Delete
+                                        </span>
+
+                                    </button>
+
+                                </form>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    {% endfor %}
+
+
+                </div>
+
+
+            {% else %}
+
+
+                <!-- No Documents -->
+
+                <div class="no-documents">
+
+                    <div class="no-documents-icon">
+                        📂
+                    </div>
+
+                    <h3>
+                        No PDF documents yet
+                    </h3>
+
+                    <p>
+                        Upload your first PDF to
+                        start analyzing documents
+                        with NexaAI.
+                    </p>
+
+                    <a
+                        href="#uploadArea"
+                        class="no-document-upload-button"
+                    >
+                        Upload Your First PDF
+                    </a>
+
+                </div>
+
+
+            {% endif %}
+
+        </section>
+
+
+
+        <!-- =================================
+             HOW IT WORKS
+        ================================== -->
+
+        <section class="how-it-works">
+
+            <div class="section-title">
+
+                <span>
+                    HOW IT WORKS
+                </span>
+
+                <h2>
+                    Analyze your documents with NexaAI
+                </h2>
+
+                <p>
+                    Upload a document and let NexaAI
+                    help you understand it.
+                </p>
+
+            </div>
+
+
+            <div class="steps">
+
+
+                <!-- Step 1 -->
+
+                <div class="step-card">
+
+                    <div class="step-number">
+                        1
+                    </div>
+
+                    <div class="step-icon">
+                        📤
+                    </div>
+
+                    <h3>
+                        Upload
+                    </h3>
+
+                    <p>
+                        Upload a PDF document
+                        up to 10 MB.
+                    </p>
+
+                </div>
+
+
+
+                <!-- Step 2 -->
+
+                <div class="step-card">
+
+                    <div class="step-number">
+                        2
+                    </div>
+
+                    <div class="step-icon">
+                        🤖
+                    </div>
+
+                    <h3>
+                        Analyze
+                    </h3>
+
+                    <p>
+                        Ask NexaAI questions
+                        about your document.
+                    </p>
+
+                </div>
+
+
+
+                <!-- Step 3 -->
+
+                <div class="step-card">
+
+                    <div class="step-number">
+                        3
+                    </div>
+
+                    <div class="step-icon">
+                        📝
+                    </div>
+
+                    <h3>
+                        Summarize
+                    </h3>
+
+                    <p>
+                        Generate an easy-to-read
+                        AI summary.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =====================================
+         FOOTER
+    ====================================== -->
+
+    <footer class="pdf-footer">
+
+        <p>
+            © 2026 NexaAI.
+            Your intelligent document assistant.
+        </p>
+
+    </footer>
+
+
+
+    <!-- =====================================
+         JAVASCRIPT
+    ====================================== -->
+
+    <script>
+
+        const pdfInput =
+            document.getElementById("pdf");
+
+        const selectedFile =
+            document.getElementById("selectedFile");
+
+        const fileName =
+            document.getElementById("fileName");
+
+        const uploadButton =
+            document.getElementById("uploadButton");
+
+        const uploadArea =
+            document.getElementById("uploadArea");
+
+
+        /*
+         * File Selection
+         */
+
+        pdfInput.addEventListener(
+            "change",
+            function () {
+
+                if (this.files.length === 0) {
+
+                    selectedFile.style.display =
+                        "none";
+
+                    uploadButton.disabled =
+                        true;
+
+                    return;
+                }
+
+
+                const file =
+                    this.files[0];
+
+
+                /*
+                 * Check PDF
+                 */
+
+                const isPDF =
+                    file.type === "application/pdf"
+                    ||
+                    file.name
+                        .toLowerCase()
+                        .endsWith(".pdf");
+
+
+                if (!isPDF) {
+
+                    alert(
+                        "Please select a PDF file."
+                    );
+
+                    this.value = "";
+
+                    selectedFile.style.display =
+                        "none";
+
+                    uploadButton.disabled =
+                        true;
+
+                    return;
+                }
+
+
+                /*
+                 * Check File Size
+                 *
+                 * 10 MB
+                 */
+
+                const maxSize =
+                    10 * 1024 * 1024;
+
+
+                if (file.size > maxSize) {
+
+                    alert(
+                        "The PDF must be smaller than 10 MB."
+                    );
+
+                    this.value = "";
+
+                    selectedFile.style.display =
+                        "none";
+
+                    uploadButton.disabled =
+                        true;
+
+                    return;
+                }
+
+
+                /*
+                 * Display Selected File
+                 */
+
+                fileName.textContent =
+                    file.name;
+
+                selectedFile.style.display =
+                    "flex";
+
+                uploadButton.disabled =
+                    false;
+
+
+                uploadArea.classList.add(
+                    "file-selected"
+                );
+
+            }
+        );
+
+
+
+        /*
+         * Upload Button
+         */
+
+        document
+            .getElementById("pdfUploadForm")
+            .addEventListener(
+                "submit",
+                function () {
+
+                    uploadButton.disabled =
+                        true;
+
+                    uploadButton.innerHTML =
+                        "⏳ Uploading PDF...";
+
+                }
+            );
+
+
+
+        /*
+         * Delete Confirmation
+         */
+
+        function confirmDelete(
+            filename
+        ) {
+
+            return confirm(
+                "Are you sure you want to delete \"" +
+                filename +
+                "\"?\n\n" +
+                "This will permanently remove the PDF."
+            );
+
+        }
+
+
+
+        /*
+         * Smooth Scroll
+         */
+
+        const firstUploadButton =
+            document.querySelector(
+                ".no-document-upload-button"
+            );
+
+
+        if (firstUploadButton) {
+
+            firstUploadButton.addEventListener(
+                "click",
+                function (event) {
+
+                    event.preventDefault();
+
+                    const target =
+                        document.getElementById(
+                            "uploadArea"
+                        );
+
+                    if (target) {
+
+                        target.scrollIntoView({
+                            behavior: "smooth",
+                            block: "center"
+                        });
+
+                    }
+
+                }
+            );
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>

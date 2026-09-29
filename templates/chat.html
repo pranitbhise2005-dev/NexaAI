@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AI Chat - NexaAI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body class="chat-body">
+
+
+    <!-- Navbar -->
+
+    <nav class="main-navbar">
+
+        <div class="navbar-brand">
+
+            <span class="brand-icon">🤖</span>
+
+            <span>NexaAI</span>
+
+        </div>
+
+
+        <div class="navbar-links">
+
+            <a href="/dashboard">
+                Dashboard
+            </a>
+
+            <a href="/chat"
+               class="active">
+                AI Chat
+            </a>
+
+            <a href="/pdf">
+                PDF Assistant
+            </a>
+
+            <a href="/history">
+                History
+            </a>
+
+            <a href="/logout"
+               class="logout-link">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- Chat Container -->
+
+    <main class="chat-container">
+
+
+        <!-- Chat Header -->
+
+        <div class="chat-header">
+
+            <div class="chat-header-left">
+
+                <div class="chat-avatar">
+                    🤖
+                </div>
+
+                <div>
+
+                    <h2>
+                        NexaAI
+                    </h2>
+
+                    <p class="online-status">
+                        <span></span>
+                        Online
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Messages -->
+
+        <div class="chat-messages"
+             id="messages">
+
+
+            <!-- Welcome Message -->
+
+            <div class="message-row assistant-row">
+
+                <div class="message-avatar">
+                    🤖
+                </div>
+
+                <div class="message assistant-message">
+
+                    <div class="message-name">
+                        NexaAI
+                    </div>
+
+                    <p>
+                        Hello {{ session["user_name"] }}! 👋
+                    </p>
+
+                    <p>
+                        I'm NexaAI, your personal AI assistant.
+                        How can I help you today?
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Typing Indicator -->
+
+            <div class="message-row assistant-row typing-row"
+                 id="typingIndicator"
+                 style="display: none;">
+
+                <div class="message-avatar">
+                    🤖
+                </div>
+
+                <div class="typing-indicator">
+
+                    <span></span>
+                    <span></span>
+                    <span></span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Chat Input -->
+
+        <div class="chat-input-container">
+
+            <div class="chat-input-wrapper">
+
+                <label for="messageInput"></label><textarea
+                    id="messageInput"
+                    placeholder="Message NexaAI..."
+                    rows="1"></textarea>
+
+                <button
+                    id="sendButton"
+                    type="button">
+
+                    ➤
+
+                </button>
+
+            </div>
+
+            <p class="chat-disclaimer">
+                NexaAI can make mistakes. Check important information.
+            </p>
+
+        </div>
+
+
+    </main>
+
+
+    <script src="{{ url_for('static', filename='js/script.js') }}">
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register - NexaAI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="auth-body">
+
+    <div class="auth-container">
+
+        <!-- Left Side -->
+        <div class="auth-info">
+
+            <div class="auth-brand">🤖</div>
+
+            <h1>Create Your NexaAI Account</h1>
+
+            <p>
+                Start using your personal AI assistant
+                for studying, document analysis and
+                everyday productivity.
+            </p>
+
+            <div class="auth-features">
+
+                <div>
+                    <span>✓</span>
+                    Local AI with Llama 3.2
+                </div>
+
+                <div>
+                    <span>✓</span>
+                    Upload and Analyze PDFs
+                </div>
+
+                <div>
+                    <span>✓</span>
+                    Generate AI Summaries
+                </div>
+
+                <div>
+                    <span>✓</span>
+                    Secure Personal Account
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Register Card -->
+        <div class="auth-card">
+
+            <div class="auth-card-header">
+
+                <h2>Create Account</h2>
+
+                <p>
+                    Create your NexaAI account to get started.
+                </p>
+
+            </div>
+
+
+            <form method="POST"
+                  action="/register"
+                  class="auth-form">
+
+                <div class="form-group">
+
+                    <label for="name">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Enter your full name"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Create a password"
+                        minlength="6"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="confirmPassword">
+                        Confirm Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        placeholder="Confirm your password"
+                        minlength="6"
+                        required
+                    >
+
+                </div>
+
+
+                <button type="submit"
+                        class="auth-button">
+
+                    Create Account
+
+                </button>
+
+            </form>
+
+
+            <div class="auth-footer">
+
+                <p>
+                    Already have an account?
+                    <a href="/login">
+                        Login
+                    </a>
+                </p>
+
+                <a href="/" class="back-home">
+                    ← Back to Home
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const password =
+            document.getElementById("password");
+
+        const confirmPassword =
+            document.getElementById("confirmPassword");
+
+
+        if (confirmPassword) {
+
+            confirmPassword.addEventListener(
+                "input",
+                function () {
+
+                    if (
+                        password.value !==
+                        confirmPassword.value
+                    ) {
+
+                        confirmPassword.setCustomValidity(
+                            "Passwords do not match."
+                        );
+
+                    } else {
+
+                        confirmPassword.setCustomValidity("");
+
+                    }
+
+                }
+            );
+
+        }
+
+    </script>
+
+</body>
+</html>

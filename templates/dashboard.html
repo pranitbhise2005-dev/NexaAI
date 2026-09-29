@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - NexaAI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body class="dashboard-body">
+
+    <!-- Navbar -->
+
+    <nav class="main-navbar">
+
+        <div class="navbar-brand">
+
+            <span class="brand-icon">🤖</span>
+
+            <span>NexaAI</span>
+
+        </div>
+
+
+        <div class="navbar-links">
+
+            <a href="/dashboard"
+               class="active">
+                Dashboard
+            </a>
+
+            <a href="/chat">
+                AI Chat
+            </a>
+
+            <a href="/pdf">
+                PDF Assistant
+            </a>
+
+            <a href="/history">
+                History
+            </a>
+
+            <a href="/logout"
+               class="logout-link">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- Main Content -->
+
+    <main class="dashboard-container">
+
+
+        <!-- Welcome, Section -->
+
+        <section class="welcome-section">
+
+            <div>
+
+                <p class="welcome-label">
+                    Welcome to NexaAI
+                </p>
+
+                <h1>
+                    Hello, {{ name }} 👋
+                </h1>
+
+                <p>
+                    Your intelligent workspace is ready.
+                    Ask questions, analyze documents,
+                    and boost your productivity with NexaAI.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- User Information -->
+
+        <section class="user-info-card">
+
+            <div class="user-avatar">
+                {{ name[0]|upper }}
+            </div>
+
+            <div>
+
+                <h3>
+                    {{ name }}
+                </h3>
+
+                <p>
+                    {{ email }}
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- Feature Cards -->
+
+        <section class="dashboard-section">
+
+            <div class="section-heading">
+
+                <h2>
+                    NexaAI Features
+                </h2>
+
+                <p>
+                    Choose a feature to get started.
+                </p>
+
+            </div>
+
+
+            <div class="feature-grid">
+
+
+                <!-- AI Chat -->
+
+                <a href="/chat"
+                   class="feature-card">
+
+                    <div class="feature-icon blue">
+                        💬
+                    </div>
+
+                    <h3>
+                        AI Chat
+                    </h3>
+
+                    <p>
+                        Chat with NexaAI and get
+                        intelligent answers to your questions.
+                    </p>
+
+                    <span class="feature-link">
+                        Start Chat →
+                    </span>
+
+                </a>
+
+
+                <!-- PDF -->
+
+                <a href="/pdf"
+                   class="feature-card">
+
+                    <div class="feature-icon purple">
+                        📄
+                    </div>
+
+                    <h3>
+                        PDF Assistant
+                    </h3>
+
+                    <p>
+                        Upload PDF documents and ask
+                        questions about their content.
+                    </p>
+
+                    <span class="feature-link">
+                        Analyze PDF →
+                    </span>
+
+                </a>
+
+
+                <!-- Summary -->
+
+                <a href="/pdf"
+                   class="feature-card">
+
+                    <div class="feature-icon green">
+                        📝
+                    </div>
+
+                    <h3>
+                        AI Summarizer
+                    </h3>
+
+                    <p>
+                        Generate concise AI-powered
+                        summaries from your documents.
+                    </p>
+
+                    <span class="feature-link">
+                        Summarize →
+                    </span>
+
+                </a>
+
+
+                <!-- History -->
+
+                <a href="/history"
+                   class="feature-card">
+
+                    <div class="feature-icon orange">
+                        🕘
+                    </div>
+
+                    <h3>
+                        Chat History
+                    </h3>
+
+                    <p>
+                        Review your previous conversations
+                        with NexaAI.
+                    </p>
+
+                    <span class="feature-link">
+                        View History →
+                    </span>
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- Quick Start -->
+
+        <section class="quick-start">
+
+            <div class="quick-start-content">
+
+                <div>
+
+                    <p class="quick-label">
+                        QUICK START
+                    </p>
+
+                    <h2>
+                        Start a conversation with NexaAI
+                    </h2>
+
+                    <p>
+                        Ask questions, learn new concepts,
+                        analyze documents and get help with
+                        your everyday tasks.
+                    </p>
+
+                </div>
+
+
+                <a href="/chat"
+                   class="quick-start-button">
+
+                    Start Chat →
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- Footer -->
+
+    <footer class="dashboard-footer">
+
+        <p>
+            © 2026 NexaAI. Your Intelligent Personal Assistant.
+        </p>
+
+    </footer>
+
+</body>
+
+</html>
